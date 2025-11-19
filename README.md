@@ -16,7 +16,7 @@ AIパーソナルコーチングエージェント - 目標達成をサポート
   - Redis
 - **AI/エージェント**:
   - Mastra (AIエージェントフレームワーク)
-  - AI SDK (Anthropic Claude / OpenAI GPT / Google Gemini)
+  - AI SDK (Anthropic Claude / OpenAI GPT / Google Gemini / DeepSeek)
 - **開発ツール**:
   - Vite
   - Vitest (テスト)
@@ -42,7 +42,7 @@ cp .env.example .env
 
 使用するAIプロバイダーを選択できます:
 
-1. **AI_PROVIDER** を設定 (選択肢: `anthropic`, `openai`, `google`)
+1. **AI_PROVIDER** を設定 (選択肢: `anthropic`, `openai`, `google`, `deepseek`)
 2. 対応するAPIキーを設定
 3. (オプション) **AI_MODEL** でカスタムモデルを指定
 
@@ -59,12 +59,17 @@ OPENAI_API_KEY="your-api-key-here"
 # Google Gemini を使用する場合
 AI_PROVIDER="google"
 GOOGLE_GENERATIVE_AI_API_KEY="your-api-key-here"
+
+# DeepSeek を使用する場合
+AI_PROVIDER="deepseek"
+DEEPSEEK_API_KEY="your-api-key-here"
 ```
 
 デフォルトモデル:
 - Anthropic: `claude-3-5-sonnet-20241022`
 - OpenAI: `gpt-4o`
 - Google: `gemini-1.5-pro`
+- DeepSeek: `deepseek-chat`
 
 ### データベース (Docker)
 
@@ -150,7 +155,7 @@ npm test
 ### Phase 3: AIヒアリング ✅ 完了
 
 - Mastraフレームワークによるゴールコーチエージェント
-- 複数AIプロバイダー対応（Anthropic Claude / OpenAI GPT / Google Gemini）
+- 複数AIプロバイダー対応（Anthropic Claude / OpenAI GPT / Google Gemini / DeepSeek）
 - チャット画面UI（メッセージ履歴、リアルタイム会話）
 - AIによる目標提案機能
 - 目標提案からの採用機能（個別/一括）

@@ -16,6 +16,11 @@ function getModelProvider() {
     case "google":
     case "gemini":
       return google(AI_MODEL || "gemini-1.5-pro");
+    case "deepseek":
+      return openai(AI_MODEL || "deepseek-chat", {
+        baseURL: "https://api.deepseek.com",
+        apiKey: process.env.DEEPSEEK_API_KEY,
+      });
     case "anthropic":
     default:
       return anthropic(AI_MODEL || "claude-3-5-sonnet-20241022");
