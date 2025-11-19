@@ -18,6 +18,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   tasks     Task[]
+  goals     Goal[]
 }
 
 // Phase 1: タスク管理モデル
@@ -30,9 +31,29 @@ model Task {
   date          DateTime // タスクの実行日
   userId        String
   user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  goalId        String?  // Phase 2: 目標との紐づけ（任意）
+  goal          Goal?    @relation(fields: [goalId], references: [id], onDelete: SetNull)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
   @@index([userId, date])
   @@index([date])
+  @@index([goalId])
+}
+
+// Phase 2: 目標管理モデル
+model Goal {
+  id          String   @id @default(cuid())
+  title       String
+  description String?  // 目的・Why
+  priority    String   @default("medium") // high, medium, low
+  isArchived  Boolean  @default(false)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tasks       Task[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+  @@index([userId, isArchived])
 }
