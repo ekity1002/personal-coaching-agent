@@ -12,14 +12,15 @@ datasource db {
 
 // Phase 0: 初期モデル（後のフェーズで拡張予定）
 model User {
-  id        String        @id @default(cuid())
-  email     String        @unique
-  name      String?
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
-  tasks     Task[]
-  goals     Goal[]
-  settings  UserSettings?
+  id          String        @id @default(cuid())
+  email       String        @unique
+  name        String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  tasks       Task[]
+  goals       Goal[]
+  settings    UserSettings?
+  reflections Reflection[]
 }
 
 // Phase 1: タスク管理モデル
@@ -70,4 +71,24 @@ model UserSettings {
   weekendHoursPerDay   Int      @default(4) // 休日の1日あたりの可処分時間（時間）
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
+}
+
+// Phase 5: 振り返りモデル
+model Reflection {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date        DateTime // 振り返りの対象日（日次の場合はその日、週次の場合は週の開始日、月次の場合は月の初日）
+  type        String   // daily, weekly, monthly
+  moodScore   Int?     // 気分スコア（1-5）
+  busynessScore Int?   // 忙しさスコア（1-5）
+  comment     String?  // 自由コメント
+  achievements String? // 達成したこと（週次・月次）
+  challenges  String?  // 課題・困難（週次・月次）
+  nextActions String?  // 次週・次月のアクション
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId, date])
+  @@index([userId, type])
 }
