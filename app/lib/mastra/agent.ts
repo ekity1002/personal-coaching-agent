@@ -1,11 +1,28 @@
 import { Agent } from "@mastra/core/agent";
 import { Mastra } from "@mastra/core";
 import { anthropic } from "@ai-sdk/anthropic";
+import { openai } from "@ai-sdk/openai";
+import { google } from "@ai-sdk/google";
 
-// 目標作成コーチングエージェント
-export const goalCoachAgent = new Agent({
-  name: "Goal Coach",
-  instructions: `
+// 環境変数からAIプロバイダー設定を取得
+const AI_PROVIDER = process.env.AI_PROVIDER || "anthropic";
+const AI_MODEL = process.env.AI_MODEL || "";
+
+// プロバイダーとモデルの設定
+function getModelProvider() {
+  switch (AI_PROVIDER.toLowerCase()) {
+    case "openai":
+      return openai(AI_MODEL || "gpt-4o");
+    case "google":
+    case "gemini":
+      return google(AI_MODEL || "gemini-1.5-pro");
+    case "anthropic":
+    default:
+      return anthropic(AI_MODEL || "claude-3-5-sonnet-20241022");
+  }
+}
+
+const AGENT_INSTRUCTIONS = `
 あなたは優秀なパーソナルコーチです。ユーザーの目標設定を支援します。
 
 ## あなたの役割
@@ -44,9 +61,14 @@ export const goalCoachAgent = new Agent({
 \`\`\`
 
 常に親身になって、ユーザーの成長を支援する姿勢で会話してください。
-  `,
+`;
+
+// 目標作成コーチングエージェント
+export const goalCoachAgent = new Agent({
+  name: "Goal Coach",
+  instructions: AGENT_INSTRUCTIONS,
   model: {
-    provider: anthropic("claude-3-5-sonnet-20241022"),
+    provider: getModelProvider(),
     toolChoice: "auto",
   },
 });

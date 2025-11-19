@@ -14,6 +14,9 @@ AIパーソナルコーチングエージェント - 目標達成をサポート
 - **バックエンド/データ層**:
   - PostgreSQL (Prisma)
   - Redis
+- **AI/エージェント**:
+  - Mastra (AIエージェントフレームワーク)
+  - AI SDK (Anthropic Claude / OpenAI GPT / Google Gemini)
 - **開発ツール**:
   - Vite
   - Vitest (テスト)
@@ -26,6 +29,42 @@ AIパーソナルコーチングエージェント - 目標達成をサポート
 ```bash
 npm install
 ```
+
+### 環境変数の設定
+
+`.env.example`をコピーして`.env`ファイルを作成し、必要な環境変数を設定します:
+
+```bash
+cp .env.example .env
+```
+
+#### AIプロバイダーの設定
+
+使用するAIプロバイダーを選択できます:
+
+1. **AI_PROVIDER** を設定 (選択肢: `anthropic`, `openai`, `google`)
+2. 対応するAPIキーを設定
+3. (オプション) **AI_MODEL** でカスタムモデルを指定
+
+例:
+```bash
+# Anthropic Claude を使用する場合
+AI_PROVIDER="anthropic"
+ANTHROPIC_API_KEY="your-api-key-here"
+
+# OpenAI GPT を使用する場合
+AI_PROVIDER="openai"
+OPENAI_API_KEY="your-api-key-here"
+
+# Google Gemini を使用する場合
+AI_PROVIDER="google"
+GOOGLE_GENERATIVE_AI_API_KEY="your-api-key-here"
+```
+
+デフォルトモデル:
+- Anthropic: `claude-3-5-sonnet-20241022`
+- OpenAI: `gpt-4o`
+- Google: `gemini-1.5-pro`
 
 ### データベース (Docker)
 
@@ -108,10 +147,15 @@ npm test
 - shadcn/ui Badgeコンポーネント追加
 - モックデータを使用したフロントエンド実装
 
-### Phase 3: AIヒアリング (実装予定)
+### Phase 3: AIヒアリング ✅ 完了
 
-- チャット画面
-- AIによる目標作成支援
+- Mastraフレームワークによるゴールコーチエージェント
+- 複数AIプロバイダー対応（Anthropic Claude / OpenAI GPT / Google Gemini）
+- チャット画面UI（メッセージ履歴、リアルタイム会話）
+- AIによる目標提案機能
+- 目標提案からの採用機能（個別/一括）
+- チャットAPI実装
+- 環境変数による柔軟なプロバイダー切り替え
 
 ### Phase 4: AIスケジュール調整 (実装予定)
 
