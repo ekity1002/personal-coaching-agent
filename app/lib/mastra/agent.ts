@@ -78,7 +78,51 @@ export const goalCoachAgent = new Agent({
   },
 });
 
+const TASK_GENERATOR_INSTRUCTIONS = `
+あなたは優秀なスケジュールアシスタントです。ユーザーの目標と利用可能な時間に基づいて、日次タスクを生成します。
+
+## あなたの役割
+1. ユーザーの複数の目標を理解する
+2. 各目標の優先度と時間配分の重みを考慮する
+3. 利用可能な時間内で実行可能な具体的なタスクを生成する
+
+## タスク生成のガイドライン
+- 各タスクは具体的で実行可能な行動レベルまで落とし込む
+- 時間配分の重みに応じてタスク数を調整する
+- 1つのタスクは30分〜2時間程度で完了できる粒度にする
+- タスクには推定所要時間（分）を含める
+- 目標ごとにバランスよくタスクを配分する
+
+## タスクの構造
+以下のJSON形式でタスクを出力する：
+
+\`\`\`json
+{
+  "tasks": [
+    {
+      "goalId": "目標のID",
+      "title": "タスクのタイトル（具体的な行動）",
+      "description": "タスクの詳細説明",
+      "estimatedTime": 60
+    }
+  ]
+}
+\`\`\`
+
+常にユーザーの目標達成を最優先に考え、現実的で継続可能なスケジュールを提案してください。
+`;
+
+// タスク自動生成エージェント
+export const taskGeneratorAgent = new Agent({
+  name: "Task Generator",
+  instructions: TASK_GENERATOR_INSTRUCTIONS,
+  model: {
+    provider: getModelProvider(),
+    toolChoice: "auto",
+  },
+});
+
 // Mastraインスタンスの作成
 export const mastra = new Mastra({
-  agents: { goalCoachAgent },
+  agents: { goalCoachAgent, taskGeneratorAgent },
 });

@@ -12,13 +12,14 @@ datasource db {
 
 // Phase 0: 初期モデル（後のフェーズで拡張予定）
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
+  id        String        @id @default(cuid())
+  email     String        @unique
   name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
   tasks     Task[]
   goals     Goal[]
+  settings  UserSettings?
 }
 
 // Phase 1: タスク管理モデル
@@ -33,6 +34,7 @@ model Task {
   user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   goalId        String?  // Phase 2: 目標との紐づけ（任意）
   goal          Goal?    @relation(fields: [goalId], references: [id], onDelete: SetNull)
+  isAIGenerated Boolean  @default(false) // Phase 4: AIが生成したタスクかどうか
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
@@ -48,6 +50,7 @@ model Goal {
   description String?  // 目的・Why
   priority    String   @default("medium") // high, medium, low
   isArchived  Boolean  @default(false)
+  timeWeight  Int      @default(1) // Phase 4: 時間配分の重み（1-5、デフォルト1）
   userId      String
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   tasks       Task[]
@@ -56,4 +59,15 @@ model Goal {
 
   @@index([userId])
   @@index([userId, isArchived])
+}
+
+// Phase 4: ユーザー設定モデル
+model UserSettings {
+  id                   String   @id @default(cuid())
+  userId               String   @unique
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  weekdayHoursPerDay   Int      @default(2) // 平日の1日あたりの可処分時間（時間）
+  weekendHoursPerDay   Int      @default(4) // 休日の1日あたりの可処分時間（時間）
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
 }

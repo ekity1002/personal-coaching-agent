@@ -6,6 +6,7 @@ export interface Goal {
   description?: string;
   priority: GoalPriority;
   isArchived: boolean;
+  timeWeight: number; // Phase 4: 時間配分の重み（1-5）
   userId: string;
   createdAt: string;
   updatedAt: string;
@@ -22,4 +23,5 @@ export interface UpdateGoalInput {
   description?: string;
   priority?: GoalPriority;
   isArchived?: boolean;
+  timeWeight?: number; // Phase 4: 時間配分の重み（1-5）
 }

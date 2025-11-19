@@ -6,6 +6,8 @@ export default [
   route("goals", "routes/goals.tsx"),
   route("goals/:id", "routes/goals.$id.tsx"),
   route("chat", "routes/chat.tsx"),
+  route("settings", "routes/settings.tsx"),
   route("api/chat", "routes/api.chat.tsx"),
   route("api/goals", "routes/api.goals.tsx"),
+  route("api/generate-tasks", "routes/api.generate-tasks.tsx"),
 ] satisfies RouteConfig;

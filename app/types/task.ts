@@ -10,6 +10,7 @@ export interface Task {
   userId: string;
   goalId?: string; // Phase 2: 目標との紐づけ
   goal?: Goal; // Phase 2: 目標情報
+  isAIGenerated: boolean; // Phase 4: AIが生成したタスクかどうか
   createdAt: string;
   updatedAt: string;
 }

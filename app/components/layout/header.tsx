@@ -20,6 +20,9 @@ export function Header() {
               <Link to="/chat">
                 <Button variant="ghost">AIコーチ</Button>
               </Link>
+              <Link to="/settings">
+                <Button variant="ghost">設定</Button>
+              </Link>
             </nav>
           </div>
         </div>
